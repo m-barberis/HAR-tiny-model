@@ -18,7 +18,7 @@ CHANNELS = tuple(
     f"{sensor}_{axis}"
     for sensor in ("body_acc", "body_gyro", "total_acc")
     for axis in "xyz"
-)
+) # all 9 channels used
 
 
 class DataLoader:
