@@ -1,4 +1,4 @@
-"""Train: python src/har/models/Hybrid_CNN_LSTM/train.py --epochs 50.
+"""Train: python src/har/models/Hybrid_GravityBranch/train.py --epochs 50.
 
 Dependencies: numpy, torch. Validation subjects come only from the training
 split. The official test split is evaluated once, after model selection.
@@ -21,20 +21,39 @@ from torch.utils.data import DataLoader as TorchDataLoader, TensorDataset
 
 from data_loader import CHANNELS, DEFAULT_DIRECTORY, DataLoader
 
-from model import HybridCNNLSTM_Dropout
+from model import HybridCNNLSTM_GravityBranch
 from report import save_report
 
 
 CLASS_NAMES = ["walking", "upstairs", "downstairs", "sitting", "standing", "laying"]
 
 
-def make_batches(X, y, mean, std, batch_size, shuffle=False):
+GRAVITY_FEATURE_NAMES = tuple(
+    f"gravity_{stat}_{axis}" for stat in ("mean", "std") for axis in "xyz"
+)
+
+
+def extract_gravity_features(X):
+    """Raw (N, time, channels) -> (N, 6): axis means, then population stds.
+
+    Subtract before channel normalization so acceleration units still match.
+    """
+    total_indices = [CHANNELS.index(f"total_acc_{axis}") for axis in "xyz"]
+    body_indices = [CHANNELS.index(f"body_acc_{axis}") for axis in "xyz"]
+    gravity = X[:, :, total_indices] - X[:, :, body_indices]
+    return np.concatenate((gravity.mean(axis=1), gravity.std(axis=1)), axis=1)
+
+
+def make_batches(X, y, mean, std, gravity_mean, gravity_std, batch_size, shuffle=False):
     # Existing loader: (N, time, channels), labels 1–6.
     # PyTorch Conv1d: (N, channels, time), labels 0–5.
     inputs = torch.from_numpy(((X - mean) / std).transpose(0, 2, 1).copy())
+    gravity_features = torch.from_numpy(
+        ((extract_gravity_features(X) - gravity_mean) / gravity_std).astype(np.float32)
+    )
     targets = torch.from_numpy(y - 1)
     return TorchDataLoader(
-        TensorDataset(inputs, targets), batch_size=batch_size, shuffle=shuffle
+        TensorDataset(inputs, gravity_features, targets), batch_size=batch_size, shuffle=shuffle
     )
 
 
@@ -43,9 +62,10 @@ def run_epoch(model, batches, criterion, device, optimizer=None):
     total_loss = 0.0
     confusion = torch.zeros(6, 6, dtype=torch.int64)
     with torch.set_grad_enabled(optimizer is not None):
-        for inputs, targets in batches:
+        for inputs, gravity_features, targets in batches:
             inputs, targets = inputs.to(device), targets.to(device)
-            logits = model(inputs)
+            gravity_features = gravity_features.to(device)
+            logits = model(inputs, gravity_features)
             loss = criterion(logits, targets) #cross-entropy loss expects logits
             if optimizer is not None: #optimizer is None during validation and testing
                 optimizer.zero_grad()
@@ -70,11 +90,11 @@ def main():
     parser.add_argument("--dropout_fc", type=float, default=0.2)
     parser.add_argument(
         "--output", type=Path,
-        default=PROJECT_ROOT / "outputs/HybridCNNLSTM_Dropout/activity_cnn.pt",
+        default=PROJECT_ROOT / "outputs/HybridCNNLSTM_GravityBranch/activity_cnn.pt",
     )
     parser.add_argument(
         "--report-dir", type=Path, default=None,
-        help="Report folder (default: reports/HybridCNNLSTM_Dropout/<UTC run timestamp>)",
+        help="Report folder (default: reports/HybridCNNLSTM_GravityBranch)",
     )
     args = parser.parse_args()
     if min(args.epochs, args.batch_size, args.patience) < 1 or args.lr <= 0:
@@ -85,13 +105,13 @@ def main():
         parser.error("dropout_fc must be between 0 and 1")
     started_at = datetime.now(timezone.utc)
     report_dir = args.report_dir or (
-        PROJECT_ROOT / "reports/HybridCNNLSTM_Dropout"
+        PROJECT_ROOT / "reports/HybridCNNLSTM_GravityBranch"
     )
     if report_dir.exists() or args.output.exists():
         parser.error(f"Output path already exists: {report_dir} or {args.output}, change it with --output or --report-dir.")
         
-    droput_cnn = args.dropout_cnn
-    droput_fc = args.dropout_fc
+    dropout_cnn = args.dropout_cnn
+    dropout_fc = args.dropout_fc
 
     torch.manual_seed(args.seed)
     rng = np.random.default_rng(args.seed)
@@ -112,14 +132,17 @@ def main():
     # per-channel statistics use training subjects only, preserving within-window means.
     mean = X_train[~is_val].mean(axis=(0, 1), keepdims=True)
     std = X_train[~is_val].std(axis=(0, 1), keepdims=True).clip(min=1e-6)
+    gravity_train = extract_gravity_features(X_train[~is_val])
+    gravity_mean = gravity_train.mean(axis=0, keepdims=True)
+    gravity_std = gravity_train.std(axis=0, keepdims=True).clip(min=1e-6)
     train_batches = make_batches(
-        X_train[~is_val], y_train[~is_val], mean, std, args.batch_size, shuffle=True
+        X_train[~is_val], y_train[~is_val], mean, std, gravity_mean, gravity_std, args.batch_size, shuffle=True
     )
     val_batches = make_batches(
-        X_train[is_val], y_train[is_val], mean, std, args.batch_size
+        X_train[is_val], y_train[is_val], mean, std, gravity_mean, gravity_std, args.batch_size
     )
 
-    model = HybridCNNLSTM_Dropout(input_channels=len(CHANNELS), dropout_cnn=droput_cnn, dropout_fc=droput_fc).to(device)
+    model = HybridCNNLSTM_GravityBranch(input_channels=len(CHANNELS), dropout_cnn=dropout_cnn, dropout_fc=dropout_fc).to(device)
     count = sum(p.numel() for p in model.parameters() if p.requires_grad)
     assert count < 20_000, f"Model exceeds parameter budget: {count}"
     print(f"Device: {device}; trainable parameters: {count:,}")
@@ -160,7 +183,9 @@ def main():
     if best_state is None:
         raise RuntimeError("Training produced no finite validation loss")
     model.load_state_dict(best_state)
-    test_batches = make_batches(X_test, y_test, mean, std, args.batch_size)
+    test_batches = make_batches(
+        X_test, y_test, mean, std, gravity_mean, gravity_std, args.batch_size
+    )
     test_loss, test_acc, confusion = run_epoch(model, test_batches, criterion, device)
     f1 = 2 * confusion.diag().float() / (
         confusion.sum(dim=0) + confusion.sum(dim=1) # F1 = 2 × true positives / (2 × true positives + false positives + false negatives)
@@ -178,6 +203,11 @@ def main():
             "model_state_dict": {k: v.cpu() for k, v in best_state.items()},
             "mean": torch.from_numpy(mean),
             "std": torch.from_numpy(std),
+            "gravity_mean": torch.from_numpy(gravity_mean),
+            "gravity_std": torch.from_numpy(gravity_std),
+            "gravity_feature_names": list(GRAVITY_FEATURE_NAMES),
+            "dropout_cnn": dropout_cnn,
+            "dropout_fc": dropout_fc,
             "channels": list(CHANNELS),
             "validation_subjects": val_subjects.tolist(),
             "best_epoch": best_epoch,
@@ -189,7 +219,7 @@ def main():
     save_report(report_dir, {
         "schema_version": 1,
         "started_at_utc": started_at.isoformat(),
-        "model": "ActivityCNN",
+        "model": "HybridCNNLSTM_GravityBranch",
         "trainable_parameters": count,
         "device": str(device),
         "config": {
@@ -199,6 +229,11 @@ def main():
             "patience": args.patience,
             "seed": args.seed,
             "optimizer": "Adam",
+            "dropout_cnn": dropout_cnn,
+            "dropout_fc": dropout_fc,
+            "gravity_feature_names": list(GRAVITY_FEATURE_NAMES),
+            "gravity_extraction": "total_acc - body_acc before normalization; per-window axis mean and population std",
+            "gravity_normalization": "per-feature mean/std fitted on training subjects only",
             "data_directory": str(args.data_dir.resolve()),
             "checkpoint_path": str(args.output.resolve()),
             "channels": list(CHANNELS),
