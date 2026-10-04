@@ -66,6 +66,8 @@ def main():
     parser.add_argument("--lr", type=float, default=1e-3)
     parser.add_argument("--patience", type=int, default=10)
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--dropout_cnn", type=float, default=0.2)
+    parser.add_argument("--dropout_fc", type=float, default=0.5)
     parser.add_argument(
         "--output", type=Path,
         default=PROJECT_ROOT / "outputs/HybridCNNLSTM_Dropout/activity_cnn.pt",
@@ -83,6 +85,9 @@ def main():
     )
     if report_dir.exists() or args.output.exists():
         parser.error(f"Output path already exists: {report_dir} or {args.output}, change it with --output or --report-dir.")
+        
+    droput_cnn = args.dropout_cnn
+    droput_fc = args.dropout_fc
 
     torch.manual_seed(args.seed)
     rng = np.random.default_rng(args.seed)
@@ -110,7 +115,7 @@ def main():
         X_train[is_val], y_train[is_val], mean, std, args.batch_size
     )
 
-    model = HybridCNNLSTM_Dropout(input_channels=len(CHANNELS)).to(device)
+    model = HybridCNNLSTM_Dropout(input_channels=len(CHANNELS), dropout_cnn=droput_cnn, dropout_fc=droput_fc).to(device)
     count = sum(p.numel() for p in model.parameters() if p.requires_grad)
     assert count < 20_000, f"Model exceeds parameter budget: {count}"
     print(f"Device: {device}; trainable parameters: {count:,}")

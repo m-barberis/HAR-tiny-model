@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "started_at_utc": "2026-10-04T16:13:28.103594+00:00",
+  "model": "ActivityCNN",
+  "trainable_parameters": 16982,
+  "device": "mps",
+  "config": {
+    "epochs_requested": 50,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "patience": 10,
+    "seed": 42,
+    "optimizer": "Adam",
+    "data_directory": "/Users/matteobarberis/HAR-smartphone/data/raw/human+activity+recognition+using+smartphones/UCI HAR Dataset",
+    "checkpoint_path": "/Users/matteobarberis/HAR-smartphone/outputs/HybridCNNLSTM_Dropout_0",
+    "channels": [
+      "body_acc_x",
+      "body_acc_y",
+      "body_acc_z",
+      "body_gyro_x",
+      "body_gyro_y",
+      "body_gyro_z",
+      "total_acc_x",
+      "total_acc_y",
+      "total_acc_z"
+    ]
+  },
+  "split": {
+    "training_subjects": [
+      1,
+      3,
+      5,
+      6,
+      7,
+      8,
+      11,
+      14,
+      15,
+      16,
+      19,
+      22,
+      23,
+      27,
+      28,
+      29
+    ],
+    "validation_subjects": [
+      17,
+      21,
+      25,
+      26,
+      30
+    ],
+    "training_windows": 5392,
+    "validation_windows": 1960,
+    "test_windows": 2947
+  },
+  "epochs_completed": 20,
+  "best_epoch": 10,
+  "best_validation_loss": 0.1277659233241361,
+  "selection_metric": "minimum validation loss",
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.9707204540334753,
+      "train_accuracy": 0.6923219584569733,
+      "val_loss": 0.4516196199825832,
+      "val_accuracy": 0.8943877551020408
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.2851959123367372,
+      "train_accuracy": 0.9287833827893175,
+      "val_loss": 0.2739680840652816,
+      "val_accuracy": 0.8938775510204081
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.16887615395582747,
+      "train_accuracy": 0.9438056379821959,
+      "val_loss": 0.1825968545462404,
+      "val_accuracy": 0.9357142857142857
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.16035921111128096,
+      "train_accuracy": 0.9413946587537092,
+      "val_loss": 0.18688496357324172,
+      "val_accuracy": 0.9321428571428572
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.1449685963837966,
+      "train_accuracy": 0.9410237388724035,
+      "val_loss": 0.15144359987913344,
+      "val_accuracy": 0.9326530612244898
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.12204229636034909,
+      "train_accuracy": 0.9515949554896143,
+      "val_loss": 0.1826314572396935,
+      "val_accuracy": 0.9214285714285714
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.12171082512008508,
+      "train_accuracy": 0.9477002967359051,
+      "val_loss": 0.1671202523481785,
+      "val_accuracy": 0.9107142857142857
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.12325155368013976,
+      "train_accuracy": 0.9508531157270029,
+      "val_loss": 0.241611155320187,
+      "val_accuracy": 0.9066326530612245
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.11499638497298832,
+      "train_accuracy": 0.9489985163204748,
+      "val_loss": 0.18162611219651845,
+      "val_accuracy": 0.926530612244898
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.11877801001779403,
+      "train_accuracy": 0.9473293768545994,
+      "val_loss": 0.1277659233241361,
+      "val_accuracy": 0.9525510204081633
+    },
+    {
+      "epoch": 11,
+      "train_loss": 0.11375485860275586,
+      "train_accuracy": 0.951780415430267,
+      "val_loss": 0.24181611126820957,
+      "val_accuracy": 0.8938775510204081
+    },
+    {
+      "epoch": 12,
+      "train_loss": 0.1220459759633336,
+      "train_accuracy": 0.9438056379821959,
+      "val_loss": 0.1688503865209617,
+      "val_accuracy": 0.9061224489795918
+    },
+    {
+      "epoch": 13,
+      "train_loss": 0.10945718295496366,
+      "train_accuracy": 0.9465875370919882,
+      "val_loss": 0.1848512623116982,
+      "val_accuracy": 0.9091836734693878
+    },
+    {
+      "epoch": 14,
+      "train_loss": 0.11263512623239341,
+      "train_accuracy": 0.9491839762611276,
+      "val_loss": 0.17555681862013073,
+      "val_accuracy": 0.9107142857142857
+    },
+    {
+      "epoch": 15,
+      "train_loss": 0.10686152863926987,
+      "train_accuracy": 0.952893175074184,
+      "val_loss": 0.1560806905717722,
+      "val_accuracy": 0.914795918367347
+    },
+    {
+      "epoch": 16,
+      "train_loss": 0.11157245575851078,
+      "train_accuracy": 0.951780415430267,
+      "val_loss": 0.2097480201751602,
+      "val_accuracy": 0.9
+    },
+    {
+      "epoch": 17,
+      "train_loss": 0.1175079104056698,
+      "train_accuracy": 0.9482566765578635,
+      "val_loss": 0.19784337536108737,
+      "val_accuracy": 0.9112244897959184
+    },
+    {
+      "epoch": 18,
+      "train_loss": 0.10876265964097721,
+      "train_accuracy": 0.9501112759643917,
+      "val_loss": 0.16403617679274507,
+      "val_accuracy": 0.926530612244898
+    },
+    {
+      "epoch": 19,
+      "train_loss": 0.10555169984521427,
+      "train_accuracy": 0.9534495548961425,
+      "val_loss": 0.19742363210843533,
+      "val_accuracy": 0.9112244897959184
+    },
+    {
+      "epoch": 20,
+      "train_loss": 0.10251941686656425,
+      "train_accuracy": 0.9530786350148368,
+      "val_loss": 0.2276320194022502,
+      "val_accuracy": 0.9025510204081633
+    }
+  ],
+  "history_note": "Training metrics accumulate during weight updates; validation metrics use evaluation mode after each epoch.",
+  "class_names": [
+    "walking",
+    "upstairs",
+    "downstairs",
+    "sitting",
+    "standing",
+    "laying"
+  ],
+  "test": {
+    "evaluated_epoch": 10,
+    "loss": 0.2562219402261399,
+    "accuracy": 0.9104173736002714,
+    "macro_f1": 0.9102983474731445,
+    "per_class_f1": {
+      "walking": 0.9580712914466858,
+      "upstairs": 0.9435569643974304,
+      "downstairs": 0.9271523356437683,
+      "sitting": 0.7966805100440979,
+      "standing": 0.8363292217254639,
+      "laying": 1.0
+    },
+    "confusion_matrix": [
+      [
+        457,
+        1,
+        38,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        443,
+        27,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        420,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        23,
+        1,
+        384,
+        83,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        89,
+        442,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        537
+      ]
+    ],
+    "confusion_matrix_orientation": "rows=true, columns=predicted; raw counts"
+  }
+}
