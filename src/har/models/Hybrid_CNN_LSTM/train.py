@@ -79,6 +79,10 @@ def main():
     args = parser.parse_args()
     if min(args.epochs, args.batch_size, args.patience) < 1 or args.lr <= 0:
         parser.error("epochs, batch-size, patience, and lr must be positive")
+    if args.dropout_cnn < 0 or args.dropout_cnn > 1:
+        parser.error("dropout_cnn must be between 0 and 1")
+    if args.dropout_fc < 0 or args.dropout_fc > 1:
+        parser.error("dropout_fc must be between 0 and 1")
     started_at = datetime.now(timezone.utc)
     report_dir = args.report_dir or (
         PROJECT_ROOT / "reports/HybridCNNLSTM_Dropout"
