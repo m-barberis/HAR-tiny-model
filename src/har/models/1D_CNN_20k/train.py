@@ -10,7 +10,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-# Make the root-level loader available when running this nested script directly.
+# Make the root-level data_loader available when running this script directly.
 PROJECT_ROOT = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(PROJECT_ROOT))
 
@@ -20,12 +20,9 @@ from torch import nn
 from torch.utils.data import DataLoader as TorchDataLoader, TensorDataset
 
 from data_loader import CHANNELS, DEFAULT_DIRECTORY, DataLoader
-if __package__:
-    from .model import ActivityCNN
-    from .report import save_report
-else:
-    from model import ActivityCNN
-    from report import save_report
+
+from model import ActivityCNN
+from report import save_report
 
 
 CLASS_NAMES = ["walking", "upstairs", "downstairs", "sitting", "standing", "laying"]
@@ -82,19 +79,26 @@ def main():
         parser.error("epochs, batch-size, patience, and lr must be positive")
     started_at = datetime.now(timezone.utc)
     report_dir = args.report_dir or (
-        PROJECT_ROOT / "reports/1D_CNN_20k" / started_at.strftime("%Y%m%dT%H%M%S%fZ")
+        PROJECT_ROOT / "reports/1D_CNN_20k"
     )
+    if report_dir.exists() or args.output.exists():
+        parser.error(f"Output path already exists: {report_dir} or {args.output}, change it with --output or --report-dir.")
 
     torch.manual_seed(args.seed)
     rng = np.random.default_rng(args.seed)
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if torch.backends.mps.is_available():
+        device = torch.device("mps")
+    elif torch.cuda.is_available():
+        device = torch.device("cuda")
+    else:
+        device = torch.device("cpu")
     X_train, X_test, y_train, y_test = DataLoader(args.data_dir).load_data()
 
     subjects = np.loadtxt(args.data_dir / "train/subject_train.txt", dtype=int)
     if len(subjects) != len(y_train):
         raise ValueError("Subject IDs must align with the training windows")
     unique_subjects = rng.permutation(np.unique(subjects))
-    val_subjects = unique_subjects[:int(np.ceil(0.2 * len(unique_subjects)))]
+    val_subjects = unique_subjects[:int(np.ceil(0.2 * len(unique_subjects)))] #randomly select 20% of subjects for validation
     is_val = np.isin(subjects, val_subjects)
     # Statistics use training subjects only, preserving within-window means.
     mean = X_train[~is_val].mean(axis=(0, 1), keepdims=True)

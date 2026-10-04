@@ -1,4 +1,4 @@
-"""Load UCI HAR acceleration and gyroscope windows (requires numpy).
+"""Load datset's acceleration and gyroscope windows (features untouched).
 
 Each X array has shape (windows, 128 time steps, 9 sensor channels).
 Channels are body_acc_x/y/z, body_gyro_x/y/z, total_acc_x/y/z.
