@@ -46,15 +46,15 @@ def run_epoch(model, batches, criterion, device, optimizer=None):
         for inputs, targets in batches:
             inputs, targets = inputs.to(device), targets.to(device)
             logits = model(inputs)
-            loss = criterion(logits, targets)
-            if optimizer is not None:
+            loss = criterion(logits, targets) #cross-entropy loss expects logits
+            if optimizer is not None: #optimizer is None during validation and testing
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
             total_loss += loss.item() * len(targets)
             indices = (targets * 6 + logits.argmax(dim=1)).detach().cpu()
             confusion += torch.bincount(indices, minlength=36).reshape(6, 6)
-    accuracy = confusion.diag().sum().item() / confusion.sum().item()
+    accuracy = confusion.diag().sum().item() / confusion.sum().item() # correct predictions / all predictions
     return total_loss / len(batches.dataset), accuracy, confusion
 
 
@@ -97,10 +97,10 @@ def main():
     subjects = np.loadtxt(args.data_dir / "train/subject_train.txt", dtype=int)
     if len(subjects) != len(y_train):
         raise ValueError("Subject IDs must align with the training windows")
-    unique_subjects = rng.permutation(np.unique(subjects))
+    unique_subjects = rng.permutation(np.unique(subjects)) # validation chosen by subject, not by window, to avoid data leakage
     val_subjects = unique_subjects[:int(np.ceil(0.2 * len(unique_subjects)))] #randomly select 20% of subjects for validation
     is_val = np.isin(subjects, val_subjects)
-    # Statistics use training subjects only, preserving within-window means.
+    # per-channel statistics use training subjects only, preserving within-window means.
     mean = X_train[~is_val].mean(axis=(0, 1), keepdims=True)
     std = X_train[~is_val].std(axis=(0, 1), keepdims=True).clip(min=1e-6)
     train_batches = make_batches(
@@ -154,7 +154,7 @@ def main():
     test_batches = make_batches(X_test, y_test, mean, std, args.batch_size)
     test_loss, test_acc, confusion = run_epoch(model, test_batches, criterion, device)
     f1 = 2 * confusion.diag().float() / (
-        confusion.sum(dim=0) + confusion.sum(dim=1)
+        confusion.sum(dim=0) + confusion.sum(dim=1) # F1 = 2 × true positives / (2 × true positives + false positives + false negatives)
     ).clamp(min=1)
     print(f"\nBest epoch: {best_epoch}")
     print(f"Test accuracy: {test_acc:.4f}; macro F1: {f1.mean().item():.4f}")
