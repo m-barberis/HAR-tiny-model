@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 
-class HybridCNNLSTM_with_Dropout(nn.Module):
+class HybridCNNLSTM_Dropout(nn.Module):
     """Input: (batch, 9, 128). Output: (batch, 6)."""
 
     def __init__(self, input_channels=9, num_classes=6, dropout_cnn=0.2, dropout_fc=0.5):
@@ -47,7 +47,7 @@ class HybridCNNLSTM_with_Dropout(nn.Module):
         return self.classifier(last_hidden)
 
 if __name__ == "__main__":
-    model = HybridCNNLSTM_with_Dropout()
+    model = HybridCNNLSTM_Dropout()
     count = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print(f"Trainable parameters: {count:,}")
     # parameters = 16.854  
