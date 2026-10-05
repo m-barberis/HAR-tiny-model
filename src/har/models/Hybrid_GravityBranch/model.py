@@ -43,7 +43,7 @@ class HybridCNNLSTM_GravityBranch(nn.Module):
         
         lstm_out, (hn, cn) = self.lstm(lstm_in)
         
-        # Concatenate the last hidden state with the gravity features
+        # Concatenate the last hidden state (or the mean of the hidden states) with the gravity features
         combined = torch.cat([lstm_out.mean(dim=1), gravity_features], dim=1)
         return self.classifier(combined)
 
