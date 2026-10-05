@@ -40,8 +40,8 @@ def extract_gravity_features(X):
     """
     total_indices = [CHANNELS.index(f"total_acc_{axis}") for axis in "xyz"]
     body_indices = [CHANNELS.index(f"body_acc_{axis}") for axis in "xyz"]
-    gravity = X[:, :, total_indices] - X[:, :, body_indices]
-    return np.concatenate((gravity.mean(axis=1), gravity.std(axis=1)), axis=1)
+    gravity = X[:, :, total_indices] - X[:, :, body_indices] # selects the total and body acceleration channels, then computes gravity
+    return np.concatenate((gravity.mean(axis=1), gravity.std(axis=1)), axis=1) # returns a (N, 6) array with the mean and std of the gravity features for each sample
 
 
 def make_batches(X, y, mean, std, gravity_mean, gravity_std, batch_size, shuffle=False):
