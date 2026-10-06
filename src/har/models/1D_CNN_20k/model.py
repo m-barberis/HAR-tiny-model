@@ -14,12 +14,15 @@ class ActivityCNN(nn.Module):
             nn.BatchNorm1d(32),
             nn.ReLU(),
             nn.MaxPool1d(2), # 128 -> 64
+            
             nn.Conv1d(32, 48, kernel_size=5, padding=2),
             nn.BatchNorm1d(48),
             nn.ReLU(),
+            
             nn.Conv1d(48, 64, kernel_size=3, padding=1),
             nn.BatchNorm1d(64),
             nn.ReLU(),
+            
             nn.AdaptiveAvgPool1d(1), # 64 -> 1
         )
         self.classifier = nn.Linear(64, num_classes)
