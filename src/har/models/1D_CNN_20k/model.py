@@ -7,13 +7,14 @@ from torch import nn
 class ActivityCNN(nn.Module):
     """Input: (batch, sensor channels, time steps). Output: class logits."""
 
-    def __init__(self, input_channels=9, num_classes=6):
+    def __init__(self, input_channels=9, num_classes=6, AvgPool1d=False):
         super().__init__()
         self.features = nn.Sequential(
             nn.Conv1d(input_channels, 32, kernel_size=7, padding=3),
             nn.BatchNorm1d(32),
             nn.ReLU(),
-            nn.MaxPool1d(2), # 128 -> 64
+            
+            nn.MaxPool1d(2)if not AvgPool1d else nn.AvgPool1d(2), # 128 -> 64
             
             nn.Conv1d(32, 48, kernel_size=5, padding=2),
             nn.BatchNorm1d(48),

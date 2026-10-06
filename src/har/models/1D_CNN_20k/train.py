@@ -66,6 +66,7 @@ def main():
     parser.add_argument("--lr", type=float, default=1e-3)
     parser.add_argument("--patience", type=int, default=10)
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--avg-pool", type=bool, default=False, help="Use AvgPool1d instead of MaxPool1d in the CNN")
     parser.add_argument(
         "--output", type=Path,
         default=PROJECT_ROOT / "outputs/1D_CNN_20k/activity_cnn.pt",
@@ -77,6 +78,8 @@ def main():
     args = parser.parse_args()
     if min(args.epochs, args.batch_size, args.patience) < 1 or args.lr <= 0:
         parser.error("epochs, batch-size, patience, and lr must be positive")
+    if args.avg_pool not in [True, False]:
+        parser.error("--avg-pool must be a boolean value (True or False)")
     started_at = datetime.now(timezone.utc)
     report_dir = args.report_dir or (
         PROJECT_ROOT / "reports/1D_CNN_20k"
@@ -110,7 +113,7 @@ def main():
         X_train[is_val], y_train[is_val], mean, std, args.batch_size
     )
 
-    model = ActivityCNN(input_channels=len(CHANNELS)).to(device)
+    model = ActivityCNN(input_channels=len(CHANNELS), AvgPool1d=args.avg_pool).to(device)
     count = sum(p.numel() for p in model.parameters() if p.requires_grad)
     assert count < 20_000, f"Model exceeds parameter budget: {count}"
     print(f"Device: {device}; trainable parameters: {count:,}")
