@@ -73,7 +73,7 @@ def main():
     )
     parser.add_argument(
         "--report-dir", type=Path, default=None,
-        help="Report folder (default: reports/1D_CNN_20k/<UTC run timestamp>)",
+        help="Report folder (default: reports/1D_CNN_20k/",
     )
     args = parser.parse_args()
     if min(args.epochs, args.batch_size, args.patience) < 1 or args.lr <= 0:
