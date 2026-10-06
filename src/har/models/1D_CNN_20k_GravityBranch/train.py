@@ -21,7 +21,7 @@ from torch.utils.data import DataLoader as TorchDataLoader, TensorDataset
 
 from data_loader import CHANNELS, DEFAULT_DIRECTORY, DataLoader
 
-from model import HybridCNNLSTM_GravityBranch
+from model import ActivityCNN_GravityBranch
 from report import save_report
 
 
@@ -86,32 +86,24 @@ def main():
     parser.add_argument("--lr", type=float, default=1e-3)
     parser.add_argument("--patience", type=int, default=10)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--dropout_cnn", type=float, default=0.2)
-    parser.add_argument("--dropout_fc", type=float, default=0.2)
     parser.add_argument(
         "--output", type=Path,
-        default=PROJECT_ROOT / "outputs/HybridCNNLSTM_GravityBranch/activity_cnn.pt",
+        default=PROJECT_ROOT / "outputs/ActivityCNN_GravityBranch/activity_cnn.pt",
     )
     parser.add_argument(
         "--report-dir", type=Path, default=None,
-        help="Report folder (default: reports/HybridCNNLSTM_GravityBranch)",
+        help="Report folder (default: reports/ActivityCNN_GravityBranch)",
     )
     args = parser.parse_args()
     if min(args.epochs, args.batch_size, args.patience) < 1 or args.lr <= 0:
         parser.error("epochs, batch-size, patience, and lr must be positive")
-    if args.dropout_cnn < 0 or args.dropout_cnn > 1:
-        parser.error("dropout_cnn must be between 0 and 1")
-    if args.dropout_fc < 0 or args.dropout_fc > 1:
-        parser.error("dropout_fc must be between 0 and 1")
     started_at = datetime.now(timezone.utc)
     report_dir = args.report_dir or (
-        PROJECT_ROOT / "reports/HybridCNNLSTM_GravityBranch"
+        PROJECT_ROOT / "reports/ActivityCNN_GravityBranch"
     )
     if report_dir.exists() or args.output.exists():
         parser.error(f"Output path already exists: {report_dir} or {args.output}, change it with --output or --report-dir.")
         
-    dropout_cnn = args.dropout_cnn
-    dropout_fc = args.dropout_fc
 
     torch.manual_seed(args.seed)
     rng = np.random.default_rng(args.seed)
@@ -142,7 +134,7 @@ def main():
         X_train[is_val], y_train[is_val], mean, std, gravity_mean, gravity_std, args.batch_size
     )
 
-    model = HybridCNNLSTM_GravityBranch(input_channels=len(CHANNELS), dropout_cnn=dropout_cnn, dropout_fc=dropout_fc).to(device)
+    model = ActivityCNN_GravityBranch(input_channels=len(CHANNELS)).to(device)
     count = sum(p.numel() for p in model.parameters() if p.requires_grad)
     assert count < 20_000, f"Model exceeds parameter budget: {count}"
     print(f"Device: {device}; trainable parameters: {count:,}")
@@ -206,8 +198,6 @@ def main():
             "gravity_mean": torch.from_numpy(gravity_mean),
             "gravity_std": torch.from_numpy(gravity_std),
             "gravity_feature_names": list(GRAVITY_FEATURE_NAMES),
-            "dropout_cnn": dropout_cnn,
-            "dropout_fc": dropout_fc,
             "channels": list(CHANNELS),
             "validation_subjects": val_subjects.tolist(),
             "best_epoch": best_epoch,
@@ -219,7 +209,7 @@ def main():
     save_report(report_dir, {
         "schema_version": 1,
         "started_at_utc": started_at.isoformat(),
-        "model": "HybridCNNLSTM_GravityBranch",
+        "model": "ActivityCNN_GravityBranch",
         "trainable_parameters": count,
         "device": str(device),
         "config": {
@@ -228,9 +218,7 @@ def main():
             "learning_rate": args.lr,
             "patience": args.patience,
             "seed": args.seed,
-            "optimizer": "Adam",
-            "dropout_cnn": dropout_cnn,
-            "dropout_fc": dropout_fc,
+            "optimizer": "Adam",        
             "gravity_feature_names": list(GRAVITY_FEATURE_NAMES),
             "gravity_extraction": "total_acc - body_acc before normalization; per-window axis mean and population std",
             "gravity_normalization": "per-feature mean/std fitted on training subjects only",
