@@ -28,24 +28,26 @@ class DataLoader:
     def load_data(self):
         """Return X_train, X_test, y_train, y_test as NumPy arrays."""
 
-        def load_split(split):
-            folder = self.directory / split
-            signals = [
-                np.loadtxt(
-                    folder / "Inertial Signals" / f"{channel}_{split}.txt",
-                    dtype=np.float32,
-                )
-                for channel in CHANNELS
-            ]
-            X = np.stack(signals, axis=-1)
-            y = np.loadtxt(folder / f"y_{split}.txt", dtype=np.int64)
-            if X.shape[0] != len(y) or X.shape[1] != 128:
-                raise ValueError(f"{split}: unexpected signal or label shape")
-            return X, y
-
-        X_train, y_train = load_split("train")
-        X_test, y_test = load_split("test")
+        X_train, y_train = self.load_split("train")
+        X_test, y_test = self.load_split("test")
         return X_train, X_test, y_train, y_test
+
+
+    def load_split(self, split):
+        """Load either the train or test windows and labels."""
+        folder = self.directory / split
+        signals = [
+            np.loadtxt(
+                folder / "Inertial Signals" / f"{channel}_{split}.txt",
+                dtype=np.float32,
+            )
+            for channel in CHANNELS
+        ]
+        X = np.stack(signals, axis=-1)
+        y = np.loadtxt(folder / f"y_{split}.txt", dtype=np.int64)
+        if X.shape[0] != len(y) or X.shape[1] != 128:
+            raise ValueError(f"{split}: unexpected signal or label shape")
+        return X, y
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "started_at_utc": "2026-10-08T20:09:30.769881+00:00",
+  "started_at_utc": "2026-10-08T20:25:59.413106+00:00",
   "model": "ActivityCNN",
   "trainable_parameters": 19734,
   "device": "mps",

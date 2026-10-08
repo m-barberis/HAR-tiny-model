@@ -1,6 +1,6 @@
 """Run a saved HAR model on the official test split and report CPU performance.
 
-Usage: python3 tests/benchmark_inference.py outputs/1D_CNN_20k/activity_cnn.pt
+Usage: python3 tests/benchmark_inference.py outputs/1D_CNN_20k/best.pt
 """
 
 import argparse

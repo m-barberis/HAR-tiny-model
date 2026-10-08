@@ -1,56 +1,64 @@
-# HAR-tiny-model
+# Human activity recognition
 
-## Folder conventions
+A small 1D CNN that classifies activity from accelerometer and gyroscope
+time-series windows in the UCI HAR dataset. The main model has 19,734 trainable
+parameters and does not use the dataset's precomputed feature table.
 
-- `data_loader.py`: shared dataset loader; its default data path is relative to this file.
-- `src/har/loader/`: data inspection notebooks and loader utilities.
-- `src/har/models/<model_name>/`: each model's definition and training script.
-- `data/`: raw and processed datasets.
-- `outputs/<model_name>/`: generated checkpoints and model results.
-- `reports/`: written analysis and reusable training reports.
-- `tests/`: automated tests.
+## Setup
 
-Place future files in the corresponding folder above.
-
-## Train the CNN
-
-From the project root, with NumPy and PyTorch installed:
+Run these commands from the project folder:
 
 ```bash
-python3 src/har/models/1D_CNN_20k/train.py --epochs 50
+python3 -m pip install -r requirements.txt
 ```
 
-The default dataset and checkpoint paths are independent of the working directory.
-The checkpoint is saved to `outputs/1D_CNN_20k/activity_cnn.pt`.
-Explicit `--data-dir` and `--output` relative paths resolve from the working directory.
+Place the extracted `UCI HAR Dataset` folder inside
+`data/raw/human+activity+recognition+using+smartphones/`.
+The scripts also accept `--data-dir` pointing to the extracted dataset folder.
 
-Each completed training run also saves a separate folder under
-`reports/1D_CNN_20k/<UTC run timestamp>/`:
+## Evaluate the saved model
 
-- `report.json`: run settings, split information, full learning history, best
-  epoch, and test loss, accuracy, macro/per-class F1, and confusion matrix.
-- `learning_curve.csv`: epoch, train/validation loss, and train/validation accuracy.
-- `confusion_matrix.csv`: labeled raw counts, with true classes in rows and
-  predicted classes in columns.
-
-Values retain their full precision; accuracy and F1 use the 0–1 scale.
-The test results correspond to the checkpoint with the lowest validation loss.
-Use `--report-dir reports/my_experiment` to choose a folder explicitly (files
-in that folder are overwritten if it is reused). Reports use only the Python
-standard library and add no dependencies.
-
-For example, load a report later to plot its learning curves or confusion matrix:
-
-```python
-import json
-from pathlib import Path
-
-report = json.loads(Path("reports/1D_CNN_20k/<run timestamp>/report.json").read_text())
-epochs = [row["epoch"] for row in report["history"]]
-val_loss = [row["val_loss"] for row in report["history"]]
-confusion_matrix = report["test"]["confusion_matrix"]
-class_names = report["class_names"]
+```bash
+python3 evaluate.py
 ```
 
-Open `src/har/loader/inspect_windows.ipynb` with the notebook kernel's working
-directory set to the project root or any folder inside it.
+This loads `outputs/1D_CNN_20k/best.pt`, applies the saved normalization,
+and runs the model on the official test set. It prints accuracy, macro F1,
+per-class F1, and the confusion matrix. Evaluation runs on the CPU.
+
+The script automatically recognizes the 1D CNN and hybrid CNN-LSTM from the
+checkpoint. For example, to evaluate the hybrid CV model:
+
+```bash
+python3 evaluate.py --weights outputs/Hybrid_CNN_LSTM_CV/best.pt
+```
+
+## Train
+
+```bash
+python3 src/har/models/1D_CNN_20k/train.py --epochs 50 \
+  --output outputs/my_run/best.pt --report-dir reports/my_run
+```
+
+Choose new output paths for each run: training stops if the checkpoint or
+report folder already exists. Without these options, the defaults are
+`outputs/1D_CNN_20k/best.pt` and `reports/1D_CNN_20k/`.
+
+Training and validation are split by subject. Normalization is fitted on the
+training subjects, and the checkpoint with the lowest validation loss is saved.
+The test set is evaluated after training. Add `--avg-pool` to use average pooling
+instead of max pooling.
+
+Each report folder contains `report.json`, `learning_curve.csv`, and
+`confusion_matrix.csv`.
+
+## Files
+
+- `data_loader.py`: loads the sensor windows and labels.
+- `evaluate.py`: evaluates saved 1D CNN and hybrid CNN-LSTM models (without gravity branches).
+- `src/har/models/1D_CNN_20k/`: main CNN and training scripts; `train_cv.py` runs the dropout cross-validation experiment.
+- Other folders in `src/har/models/`: hybrid CNN-LSTM and gravity-branch experiments.
+- `src/har/inspection/inspect_windows.ipynb`: data inspection notebook.
+- `outputs/`: saved checkpoints.
+- `reports/`: experiment settings and results.
+- `tests/benchmark_inference.py`: optional CPU inference timing.

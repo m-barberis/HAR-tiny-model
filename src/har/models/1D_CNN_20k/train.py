@@ -66,10 +66,10 @@ def main():
     parser.add_argument("--lr", type=float, default=1e-3)
     parser.add_argument("--patience", type=int, default=10)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--avg-pool", type=bool, default=False, help="Use AvgPool1d instead of MaxPool1d in the CNN")
+    parser.add_argument("--avg-pool", action="store_true", default=False, help="Use AvgPool1d instead of MaxPool1d in the CNN")
     parser.add_argument(
         "--output", type=Path,
-        default=PROJECT_ROOT / "outputs/1D_CNN_20k/activity_cnn.pt",
+        default=PROJECT_ROOT / "outputs/1D_CNN_20k/best.pt",
     )
     parser.add_argument(
         "--report-dir", type=Path, default=None,
@@ -176,6 +176,7 @@ def main():
             "validation_subjects": val_subjects.tolist(),
             "best_epoch": best_epoch,
             "seed": args.seed,
+            "avg_pool": args.avg_pool,
         },
         args.output,
     )
@@ -192,6 +193,7 @@ def main():
             "learning_rate": args.lr,
             "patience": args.patience,
             "seed": args.seed,
+            "avg_pool": args.avg_pool,
             "optimizer": "Adam",
             "data_directory": str(args.data_dir.resolve()),
             "checkpoint_path": str(args.output.resolve()),
