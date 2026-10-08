@@ -189,7 +189,7 @@ def main():
     save_report(report_dir, {
         "schema_version": 1,
         "started_at_utc": started_at.isoformat(),
-        "model": "ActivityCNN",
+        "model": "HybridCNNLSTM_Dropout",
         "trainable_parameters": count,
         "device": str(device),
         "config": {
@@ -202,6 +202,8 @@ def main():
             "data_directory": str(args.data_dir.resolve()),
             "checkpoint_path": str(args.output.resolve()),
             "channels": list(CHANNELS),
+            "dropout_cnn": args.dropout_cnn,
+            "dropout_fc": args.dropout_fc
         },
         "split": {
             "training_subjects": sorted(np.unique(subjects[~is_val]).tolist()),

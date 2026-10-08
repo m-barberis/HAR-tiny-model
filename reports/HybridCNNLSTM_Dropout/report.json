@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "started_at_utc": "2026-10-08T20:51:30.875613+00:00",
-  "model": "ActivityCNN",
+  "started_at_utc": "2026-10-08T21:11:41.378662+00:00",
+  "model": "HybridCNNLSTM_Dropout",
   "trainable_parameters": 16982,
   "device": "mps",
   "config": {
@@ -23,7 +23,9 @@
       "total_acc_x",
       "total_acc_y",
       "total_acc_z"
-    ]
+    ],
+    "dropout_cnn": 0.2,
+    "dropout_fc": 0.2
   },
   "split": {
     "training_subjects": [
