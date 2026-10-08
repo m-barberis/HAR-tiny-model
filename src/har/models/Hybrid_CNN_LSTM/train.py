@@ -70,11 +70,11 @@ def main():
     parser.add_argument("--dropout_fc", type=float, default=0.2)
     parser.add_argument(
         "--output", type=Path,
-        default=PROJECT_ROOT / "outputs/HybridCNNLSTM_Dropout/activity_cnn.pt",
+        default=PROJECT_ROOT / "outputs/HybridCNNLSTM_Dropout/best.pt",
     )
     parser.add_argument(
         "--report-dir", type=Path, default=None,
-        help="Report folder (default: reports/HybridCNNLSTM_Dropout/<UTC run timestamp>)",
+        help="Report folder (default: reports/HybridCNNLSTM_Dropout/",
     )
     args = parser.parse_args()
     if min(args.epochs, args.batch_size, args.patience) < 1 or args.lr <= 0:
