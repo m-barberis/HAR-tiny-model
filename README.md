@@ -9,7 +9,7 @@ parameters and does not use the dataset's precomputed feature table.
 Run these commands from the project folder:
 
 ```bash
-python3 -m pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
 Place the extracted `UCI HAR Dataset` folder inside
@@ -19,7 +19,7 @@ The scripts also accept `--data-dir` pointing to the extracted dataset folder.
 ## Evaluate the saved model
 
 ```bash
-python3 evaluate.py
+python evaluate.py
 ```
 
 This loads `outputs/1D_CNN_20k/best.pt`, applies the saved normalization,
@@ -30,13 +30,13 @@ The script automatically recognizes the 1D CNN and hybrid CNN-LSTM from the
 checkpoint. For example, to evaluate the hybrid CV model:
 
 ```bash
-python3 evaluate.py --weights outputs/Hybrid_CNN_LSTM_CV/best.pt
+python evaluate.py --weights outputs/Hybrid_CNN_LSTM_CV/best.pt
 ```
 
 ## Train
 
 ```bash
-python3 src/har/models/1D_CNN_20k/train.py --epochs 50 \
+python src/har/models/1D_CNN_20k/train.py --epochs 50 \
   --output outputs/my_run/best.pt --report-dir reports/my_run
 ```
 
@@ -57,8 +57,7 @@ Each report folder contains `report.json`, `learning_curve.csv`, and
 - `data_loader.py`: loads the sensor windows and labels.
 - `evaluate.py`: evaluates saved 1D CNN and hybrid CNN-LSTM models (without gravity branches).
 - `src/har/models/1D_CNN_20k/`: main CNN and training scripts; `train_cv.py` runs the dropout cross-validation experiment.
-- Other folders in `src/har/models/`: hybrid CNN-LSTM and gravity-branch experiments.
+- `src/har/models/Hybrid_CNN_LSTM`: hybrid CNN-LSTM model and training scripts.
 - `src/har/inspection/inspect_windows.ipynb`: data inspection notebook.
 - `outputs/`: saved checkpoints.
 - `reports/`: experiment settings and results.
-- `tests/benchmark_inference.py`: optional CPU inference timing.
