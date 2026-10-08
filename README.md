@@ -58,6 +58,5 @@ Each report folder contains `report.json`, `learning_curve.csv`, and
 - `evaluate.py`: evaluates saved 1D CNN and hybrid CNN-LSTM models (without gravity branches).
 - `src/har/models/1D_CNN_20k/`: main CNN and training scripts; `train_cv.py` runs the dropout cross-validation experiment.
 - `src/har/models/Hybrid_CNN_LSTM`: hybrid CNN-LSTM model and training scripts.
-- `src/har/inspection/inspect_windows.ipynb`: data inspection notebook.
 - `outputs/`: saved checkpoints.
 - `reports/`: experiment settings and results.
