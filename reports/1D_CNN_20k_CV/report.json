@@ -1,0 +1,705 @@
+{
+  "schema_version": 1,
+  "started_at_utc": "2026-10-08T15:51:43.395522+00:00",
+  "model": "ActivityCNN",
+  "trainable_parameters": 19734,
+  "device": "mps",
+  "config": {
+    "epochs_requested": 50,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "patience": 10,
+    "seed": 42,
+    "optimizer": "Adam",
+    "dropout": 0.2,
+    "avg_pool": false,
+    "data_directory": "/Users/matteobarberis/HAR-smartphone/data/raw/human+activity+recognition+using+smartphones/UCI HAR Dataset",
+    "checkpoint_path": "/Users/matteobarberis/HAR-smartphone/outputs/1D_CNN_20k_CV/best.pt",
+    "channels": [
+      "body_acc_x",
+      "body_acc_y",
+      "body_acc_z",
+      "body_gyro_x",
+      "body_gyro_y",
+      "body_gyro_z",
+      "total_acc_x",
+      "total_acc_y",
+      "total_acc_z"
+    ]
+  },
+  "split": {
+    "training_subjects": [
+      1,
+      3,
+      5,
+      6,
+      7,
+      8,
+      11,
+      14,
+      15,
+      16,
+      19,
+      22,
+      23,
+      27,
+      28,
+      29
+    ],
+    "validation_subjects": [
+      17,
+      21,
+      25,
+      26,
+      30
+    ],
+    "training_windows": 5392,
+    "validation_windows": 1960,
+    "test_windows": 2947
+  },
+  "epochs_completed": 18,
+  "cross_validation": {
+    "fold_count": 5,
+    "selection_metric": "lowest mean of per-fold minimum validation losses",
+    "selected_dropout": 0.2,
+    "candidates": [
+      {
+        "dropout": 0.0,
+        "folds": [
+          {
+            "fold": 1,
+            "validation_subjects": [
+              17,
+              21,
+              25,
+              26,
+              30
+            ],
+            "training_windows": 5392,
+            "validation_windows": 1960,
+            "best_epoch": 12,
+            "best_validation_loss": 0.1326006053657062
+          },
+          {
+            "fold": 2,
+            "validation_subjects": [
+              11,
+              14,
+              16,
+              23
+            ],
+            "training_windows": 5975,
+            "validation_windows": 1377,
+            "best_epoch": 4,
+            "best_validation_loss": 0.39597746690081875
+          },
+          {
+            "fold": 3,
+            "validation_subjects": [
+              1,
+              6,
+              8,
+              27
+            ],
+            "training_windows": 6023,
+            "validation_windows": 1329,
+            "best_epoch": 27,
+            "best_validation_loss": 0.04026796394824019
+          },
+          {
+            "fold": 4,
+            "validation_subjects": [
+              5,
+              7,
+              19,
+              29
+            ],
+            "training_windows": 6038,
+            "validation_windows": 1314,
+            "best_epoch": 2,
+            "best_validation_loss": 0.17251229178744454
+          },
+          {
+            "fold": 5,
+            "validation_subjects": [
+              3,
+              15,
+              22,
+              28
+            ],
+            "training_windows": 5980,
+            "validation_windows": 1372,
+            "best_epoch": 4,
+            "best_validation_loss": 0.1722839667201151
+          }
+        ],
+        "mean_validation_loss": 0.18272845894446496
+      },
+      {
+        "dropout": 0.1,
+        "folds": [
+          {
+            "fold": 1,
+            "validation_subjects": [
+              17,
+              21,
+              25,
+              26,
+              30
+            ],
+            "training_windows": 5392,
+            "validation_windows": 1960,
+            "best_epoch": 3,
+            "best_validation_loss": 0.1500765041353143
+          },
+          {
+            "fold": 2,
+            "validation_subjects": [
+              11,
+              14,
+              16,
+              23
+            ],
+            "training_windows": 5975,
+            "validation_windows": 1377,
+            "best_epoch": 3,
+            "best_validation_loss": 0.3724225993141716
+          },
+          {
+            "fold": 3,
+            "validation_subjects": [
+              1,
+              6,
+              8,
+              27
+            ],
+            "training_windows": 6023,
+            "validation_windows": 1329,
+            "best_epoch": 24,
+            "best_validation_loss": 0.041588621375099645
+          },
+          {
+            "fold": 4,
+            "validation_subjects": [
+              5,
+              7,
+              19,
+              29
+            ],
+            "training_windows": 6038,
+            "validation_windows": 1314,
+            "best_epoch": 17,
+            "best_validation_loss": 0.13703635886459575
+          },
+          {
+            "fold": 5,
+            "validation_subjects": [
+              3,
+              15,
+              22,
+              28
+            ],
+            "training_windows": 5980,
+            "validation_windows": 1372,
+            "best_epoch": 4,
+            "best_validation_loss": 0.1705113897051217
+          }
+        ],
+        "mean_validation_loss": 0.1743270946788606
+      },
+      {
+        "dropout": 0.2,
+        "folds": [
+          {
+            "fold": 1,
+            "validation_subjects": [
+              17,
+              21,
+              25,
+              26,
+              30
+            ],
+            "training_windows": 5392,
+            "validation_windows": 1960,
+            "best_epoch": 13,
+            "best_validation_loss": 0.14434535753609118
+          },
+          {
+            "fold": 2,
+            "validation_subjects": [
+              11,
+              14,
+              16,
+              23
+            ],
+            "training_windows": 5975,
+            "validation_windows": 1377,
+            "best_epoch": 3,
+            "best_validation_loss": 0.35370304280744574
+          },
+          {
+            "fold": 3,
+            "validation_subjects": [
+              1,
+              6,
+              8,
+              27
+            ],
+            "training_windows": 6023,
+            "validation_windows": 1329,
+            "best_epoch": 16,
+            "best_validation_loss": 0.04521661649693394
+          },
+          {
+            "fold": 4,
+            "validation_subjects": [
+              5,
+              7,
+              19,
+              29
+            ],
+            "training_windows": 6038,
+            "validation_windows": 1314,
+            "best_epoch": 8,
+            "best_validation_loss": 0.1487381415448011
+          },
+          {
+            "fold": 5,
+            "validation_subjects": [
+              3,
+              15,
+              22,
+              28
+            ],
+            "training_windows": 5980,
+            "validation_windows": 1372,
+            "best_epoch": 4,
+            "best_validation_loss": 0.15952983603245272
+          }
+        ],
+        "mean_validation_loss": 0.17030659888354496
+      },
+      {
+        "dropout": 0.3,
+        "folds": [
+          {
+            "fold": 1,
+            "validation_subjects": [
+              17,
+              21,
+              25,
+              26,
+              30
+            ],
+            "training_windows": 5392,
+            "validation_windows": 1960,
+            "best_epoch": 11,
+            "best_validation_loss": 0.14272295388830256
+          },
+          {
+            "fold": 2,
+            "validation_subjects": [
+              11,
+              14,
+              16,
+              23
+            ],
+            "training_windows": 5975,
+            "validation_windows": 1377,
+            "best_epoch": 2,
+            "best_validation_loss": 0.3595414164549818
+          },
+          {
+            "fold": 3,
+            "validation_subjects": [
+              1,
+              6,
+              8,
+              27
+            ],
+            "training_windows": 6023,
+            "validation_windows": 1329,
+            "best_epoch": 10,
+            "best_validation_loss": 0.047246732908207155
+          },
+          {
+            "fold": 4,
+            "validation_subjects": [
+              5,
+              7,
+              19,
+              29
+            ],
+            "training_windows": 6038,
+            "validation_windows": 1314,
+            "best_epoch": 11,
+            "best_validation_loss": 0.16598590651400885
+          },
+          {
+            "fold": 5,
+            "validation_subjects": [
+              3,
+              15,
+              22,
+              28
+            ],
+            "training_windows": 5980,
+            "validation_windows": 1372,
+            "best_epoch": 5,
+            "best_validation_loss": 0.15699203884427276
+          }
+        ],
+        "mean_validation_loss": 0.17449780972195458
+      },
+      {
+        "dropout": 0.4,
+        "folds": [
+          {
+            "fold": 1,
+            "validation_subjects": [
+              17,
+              21,
+              25,
+              26,
+              30
+            ],
+            "training_windows": 5392,
+            "validation_windows": 1960,
+            "best_epoch": 12,
+            "best_validation_loss": 0.14114931475903306
+          },
+          {
+            "fold": 2,
+            "validation_subjects": [
+              11,
+              14,
+              16,
+              23
+            ],
+            "training_windows": 5975,
+            "validation_windows": 1377,
+            "best_epoch": 4,
+            "best_validation_loss": 0.4019514100934523
+          },
+          {
+            "fold": 3,
+            "validation_subjects": [
+              1,
+              6,
+              8,
+              27
+            ],
+            "training_windows": 6023,
+            "validation_windows": 1329,
+            "best_epoch": 34,
+            "best_validation_loss": 0.044117160904151555
+          },
+          {
+            "fold": 4,
+            "validation_subjects": [
+              5,
+              7,
+              19,
+              29
+            ],
+            "training_windows": 6038,
+            "validation_windows": 1314,
+            "best_epoch": 14,
+            "best_validation_loss": 0.1507455283624249
+          },
+          {
+            "fold": 5,
+            "validation_subjects": [
+              3,
+              15,
+              22,
+              28
+            ],
+            "training_windows": 5980,
+            "validation_windows": 1372,
+            "best_epoch": 4,
+            "best_validation_loss": 0.15324602307583432
+          }
+        ],
+        "mean_validation_loss": 0.17824188743897923
+      },
+      {
+        "dropout": 0.5,
+        "folds": [
+          {
+            "fold": 1,
+            "validation_subjects": [
+              17,
+              21,
+              25,
+              26,
+              30
+            ],
+            "training_windows": 5392,
+            "validation_windows": 1960,
+            "best_epoch": 7,
+            "best_validation_loss": 0.12614539015505996
+          },
+          {
+            "fold": 2,
+            "validation_subjects": [
+              11,
+              14,
+              16,
+              23
+            ],
+            "training_windows": 5975,
+            "validation_windows": 1377,
+            "best_epoch": 3,
+            "best_validation_loss": 0.38975172706310873
+          },
+          {
+            "fold": 3,
+            "validation_subjects": [
+              1,
+              6,
+              8,
+              27
+            ],
+            "training_windows": 6023,
+            "validation_windows": 1329,
+            "best_epoch": 29,
+            "best_validation_loss": 0.04091423557216492
+          },
+          {
+            "fold": 4,
+            "validation_subjects": [
+              5,
+              7,
+              19,
+              29
+            ],
+            "training_windows": 6038,
+            "validation_windows": 1314,
+            "best_epoch": 10,
+            "best_validation_loss": 0.15888421266962374
+          },
+          {
+            "fold": 5,
+            "validation_subjects": [
+              3,
+              15,
+              22,
+              28
+            ],
+            "training_windows": 5980,
+            "validation_windows": 1372,
+            "best_epoch": 5,
+            "best_validation_loss": 0.15442508161230875
+          }
+        ],
+        "mean_validation_loss": 0.1740241294144532
+      }
+    ]
+  },
+  "best_epoch": 8,
+  "best_validation_loss": 0.1441058984197372,
+  "selection_metric": "minimum validation loss",
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.647304094067667,
+      "train_accuracy": 0.859606824925816,
+      "val_loss": 0.2531231012271375,
+      "val_accuracy": 0.935204081632653
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.20202539255428031,
+      "train_accuracy": 0.9445474777448071,
+      "val_loss": 0.19517474680834887,
+      "val_accuracy": 0.9280612244897959
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.15476185675898363,
+      "train_accuracy": 0.9478857566765578,
+      "val_loss": 0.18221840121004046,
+      "val_accuracy": 0.9224489795918367
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.13890790965861313,
+      "train_accuracy": 0.9491839762611276,
+      "val_loss": 0.14542522427759,
+      "val_accuracy": 0.939795918367347
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.13198713414393123,
+      "train_accuracy": 0.9486275964391692,
+      "val_loss": 0.15435926359983124,
+      "val_accuracy": 0.926530612244898
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.12405357856955655,
+      "train_accuracy": 0.9456602373887241,
+      "val_loss": 0.16953002842599335,
+      "val_accuracy": 0.9137755102040817
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.11674207337311185,
+      "train_accuracy": 0.9501112759643917,
+      "val_loss": 0.1622972032815522,
+      "val_accuracy": 0.9193877551020408
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.11438056172178478,
+      "train_accuracy": 0.9519658753709199,
+      "val_loss": 0.1441058984197372,
+      "val_accuracy": 0.938265306122449
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.11681663030509779,
+      "train_accuracy": 0.9502967359050445,
+      "val_loss": 0.16806462491121218,
+      "val_accuracy": 0.914795918367347
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.1204925499171107,
+      "train_accuracy": 0.9480712166172107,
+      "val_loss": 0.16100258588771887,
+      "val_accuracy": 0.9163265306122449
+    },
+    {
+      "epoch": 11,
+      "train_loss": 0.1090674467097404,
+      "train_accuracy": 0.9521513353115727,
+      "val_loss": 0.1750107106762197,
+      "val_accuracy": 0.9137755102040817
+    },
+    {
+      "epoch": 12,
+      "train_loss": 0.10719719829828166,
+      "train_accuracy": 0.953820474777448,
+      "val_loss": 0.17665021903337721,
+      "val_accuracy": 0.9163265306122449
+    },
+    {
+      "epoch": 13,
+      "train_loss": 0.10484007330340518,
+      "train_accuracy": 0.9554896142433235,
+      "val_loss": 0.15882556588693084,
+      "val_accuracy": 0.8969387755102041
+    },
+    {
+      "epoch": 14,
+      "train_loss": 0.10810118904807094,
+      "train_accuracy": 0.9540059347181009,
+      "val_loss": 0.22525653811931914,
+      "val_accuracy": 0.9076530612244897
+    },
+    {
+      "epoch": 15,
+      "train_loss": 0.10370504946754665,
+      "train_accuracy": 0.954933234421365,
+      "val_loss": 0.16742925743087747,
+      "val_accuracy": 0.9321428571428572
+    },
+    {
+      "epoch": 16,
+      "train_loss": 0.10558723806450558,
+      "train_accuracy": 0.9523367952522255,
+      "val_loss": 0.17729118033787425,
+      "val_accuracy": 0.9040816326530612
+    },
+    {
+      "epoch": 17,
+      "train_loss": 0.09984533406948831,
+      "train_accuracy": 0.9556750741839762,
+      "val_loss": 0.1794396196591801,
+      "val_accuracy": 0.9005102040816326
+    },
+    {
+      "epoch": 18,
+      "train_loss": 0.09610478022862613,
+      "train_accuracy": 0.9584569732937686,
+      "val_loss": 0.1932895738802546,
+      "val_accuracy": 0.9071428571428571
+    }
+  ],
+  "history_note": "Training metrics accumulate during weight updates; validation metrics use evaluation mode after each epoch.",
+  "class_names": [
+    "walking",
+    "upstairs",
+    "downstairs",
+    "sitting",
+    "standing",
+    "laying"
+  ],
+  "test": {
+    "evaluated_epoch": 8,
+    "loss": 0.2269794245354495,
+    "accuracy": 0.9165252799457075,
+    "macro_f1": 0.9160950183868408,
+    "per_class_f1": {
+      "walking": 0.9752066135406494,
+      "upstairs": 0.9541088342666626,
+      "downstairs": 0.9459459185600281,
+      "sitting": 0.7824175953865051,
+      "standing": 0.8435251712799072,
+      "laying": 0.995366096496582
+    },
+    "confusion_matrix": [
+      [
+        472,
+        0,
+        24,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        447,
+        24,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        420,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        19,
+        0,
+        356,
+        111,
+        5
+      ],
+      [
+        0,
+        0,
+        0,
+        63,
+        469,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        537
+      ]
+    ],
+    "confusion_matrix_orientation": "rows=true, columns=predicted; raw counts"
+  }
+}

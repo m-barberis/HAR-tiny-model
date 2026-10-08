@@ -4,7 +4,7 @@ from torch import nn
 class HybridCNNLSTM_Dropout(nn.Module):
     """Input: (batch, 9, 128). Output: (batch, 6)."""
 
-    def __init__(self, input_channels=9, num_classes=6, dropout_cnn=0.2, dropout_fc=0.5):
+    def __init__(self, input_channels=9, num_classes=6, dropout_cnn=0.2, dropout_fc=0.2):
         super().__init__()
         
         self.cnn = nn.Sequential(
