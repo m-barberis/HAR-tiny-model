@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "started_at_utc": "2026-10-09T06:33:14.567135+00:00",
+  "model": "ActivityCNN",
+  "trainable_parameters": 19734,
+  "device": "mps",
+  "config": {
+    "epochs_requested": 50,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "patience": 10,
+    "seed": 1,
+    "avg_pool": false,
+    "optimizer": "Adam",
+    "data_directory": "/Users/matteobarberis/HAR-smartphone/data/raw/human+activity+recognition+using+smartphones/UCI HAR Dataset",
+    "checkpoint_path": "/Users/matteobarberis/HAR-smartphone/outputs/1D_CNN_20k/best_seed1.pt",
+    "channels": [
+      "body_acc_x",
+      "body_acc_y",
+      "body_acc_z",
+      "body_gyro_x",
+      "body_gyro_y",
+      "body_gyro_z",
+      "total_acc_x",
+      "total_acc_y",
+      "total_acc_z"
+    ]
+  },
+  "split": {
+    "training_subjects": [
+      1,
+      5,
+      6,
+      7,
+      8,
+      11,
+      15,
+      16,
+      17,
+      21,
+      22,
+      23,
+      26,
+      27,
+      28,
+      29
+    ],
+    "validation_subjects": [
+      3,
+      14,
+      19,
+      25,
+      30
+    ],
+    "training_windows": 5536,
+    "validation_windows": 1816,
+    "test_windows": 2947
+  },
+  "epochs_completed": 13,
+  "best_epoch": 3,
+  "best_validation_loss": 0.17117805613229453,
+  "selection_metric": "minimum validation loss",
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.6129819590576812,
+      "train_accuracy": 0.868135838150289,
+      "val_loss": 0.2808497534974556,
+      "val_accuracy": 0.9372246696035242
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.1846718663252847,
+      "train_accuracy": 0.942557803468208,
+      "val_loss": 0.2594956010580063,
+      "val_accuracy": 0.9162995594713657
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.1494074171850447,
+      "train_accuracy": 0.9432803468208093,
+      "val_loss": 0.17117805613229453,
+      "val_accuracy": 0.9405286343612335
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.1316745229969824,
+      "train_accuracy": 0.9477962427745664,
+      "val_loss": 0.18561700619100738,
+      "val_accuracy": 0.9162995594713657
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.12455259104167794,
+      "train_accuracy": 0.9470736994219653,
+      "val_loss": 0.31410183688207216,
+      "val_accuracy": 0.9212555066079295
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.1209085463099397,
+      "train_accuracy": 0.9477962427745664,
+      "val_loss": 0.28471089957798895,
+      "val_accuracy": 0.9151982378854625
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.1188775962272476,
+      "train_accuracy": 0.9494219653179191,
+      "val_loss": 0.21197892182674832,
+      "val_accuracy": 0.9234581497797357
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.12441453337669373,
+      "train_accuracy": 0.9477962427745664,
+      "val_loss": 0.2439002119648857,
+      "val_accuracy": 0.9229074889867841
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.11065338112715352,
+      "train_accuracy": 0.9523121387283237,
+      "val_loss": 0.25566020402811174,
+      "val_accuracy": 0.9157488986784141
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.10937170133080786,
+      "train_accuracy": 0.9542991329479769,
+      "val_loss": 0.2741155199345513,
+      "val_accuracy": 0.9190528634361234
+    },
+    {
+      "epoch": 11,
+      "train_loss": 0.1092968585691011,
+      "train_accuracy": 0.9474349710982659,
+      "val_loss": 0.3998637348444238,
+      "val_accuracy": 0.9179515418502202
+    },
+    {
+      "epoch": 12,
+      "train_loss": 0.10632373474409125,
+      "train_accuracy": 0.9517702312138728,
+      "val_loss": 0.3805214693966744,
+      "val_accuracy": 0.8909691629955947
+    },
+    {
+      "epoch": 13,
+      "train_loss": 0.10728374575776171,
+      "train_accuracy": 0.952492774566474,
+      "val_loss": 0.35085303146014657,
+      "val_accuracy": 0.9218061674008811
+    }
+  ],
+  "history_note": "Training metrics accumulate during weight updates; validation metrics use evaluation mode after each epoch.",
+  "class_names": [
+    "walking",
+    "upstairs",
+    "downstairs",
+    "sitting",
+    "standing",
+    "laying"
+  ],
+  "test": {
+    "evaluated_epoch": 3,
+    "loss": 0.22259134569176586,
+    "accuracy": 0.9182219205972175,
+    "macro_f1": 0.9186671376228333,
+    "per_class_f1": {
+      "walking": 0.9706457853317261,
+      "upstairs": 0.9513274431228638,
+      "downstairs": 0.9577465057373047,
+      "sitting": 0.8008519411087036,
+      "standing": 0.8360655903816223,
+      "laying": 0.995366096496582
+    },
+    "confusion_matrix": [
+      [
+        496,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        17,
+        430,
+        24,
+        0,
+        0,
+        0
+      ],
+      [
+        11,
+        1,
+        408,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        2,
+        0,
+        376,
+        107,
+        5
+      ],
+      [
+        1,
+        0,
+        0,
+        72,
+        459,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        537
+      ]
+    ],
+    "confusion_matrix_orientation": "rows=true, columns=predicted; raw counts"
+  }
+}

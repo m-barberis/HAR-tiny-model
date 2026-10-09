@@ -1,0 +1,7 @@
+true_activity / predicted_activity,walking,upstairs,downstairs,sitting,standing,laying
+walking,478,0,18,0,0,0
+upstairs,8,437,26,0,0,0
+downstairs,0,0,420,0,0,0
+sitting,0,2,0,382,107,0
+standing,0,0,0,85,447,0
+laying,0,26,0,0,0,511
