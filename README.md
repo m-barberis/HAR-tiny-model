@@ -4,6 +4,9 @@ A small 1D CNN that classifies activity from accelerometer and gyroscope
 time-series windows in the UCI HAR dataset. The main model has 19,734 trainable
 parameters and does not use the dataset's precomputed feature table.
 
+Further experiments that have been made during the week, like the insertion of gravity features in the classifier or training runs with different seeds, are not included to keep the results' submission clear and simple.
+Only the source code will be submitted, so you will need to train the models again to evaluate them. 
+
 ## Setup
 
 Run these commands from the project folder:
