@@ -30,6 +30,8 @@ Choose new output paths for each run: training stops if the checkpoint or
 report folder already exists. Without these options, the defaults are
 `outputs/1D_CNN_20k/best.pt` and `reports/1D_CNN_20k/`.
 
+**The reports from my runs are included in the submission, so using the command without changing --report-dir will cause an error.**
+
 Training and validation are split by subject. Normalization is fitted on the
 training subjects, and the checkpoint with the lowest validation loss is saved.
 The test set is evaluated after training. Add `--avg-pool` to use average pooling
