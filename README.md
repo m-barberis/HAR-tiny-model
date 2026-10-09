@@ -16,25 +16,8 @@ python -m pip install -r requirements.txt
 ```
 
 Place the extracted `UCI HAR Dataset` folder inside
-`data/raw/human+activity+recognition+using+smartphones/`.
+`data/raw/`.
 The scripts also accept `--data-dir` pointing to the extracted dataset folder.
-
-## Evaluate the saved model
-
-```bash
-python evaluate.py
-```
-
-This loads `outputs/1D_CNN_20k/best.pt`, applies the saved normalization,
-and runs the model on the official test set. It prints accuracy, macro F1,
-per-class F1, and the confusion matrix. Evaluation runs on the CPU.
-
-The script automatically recognizes the 1D CNN and hybrid CNN-LSTM from the
-checkpoint. For example, to evaluate the hybrid CV model:
-
-```bash
-python evaluate.py --weights outputs/Hybrid_CNN_LSTM_CV/best.pt
-```
 
 ## Train
 
@@ -54,6 +37,23 @@ instead of max pooling.
 
 Each report folder contains `report.json`, `learning_curve.csv`, and
 `confusion_matrix.csv`.
+
+## Evaluate the saved model
+
+```bash
+python evaluate.py --weights outputs/my_run/best.pt
+```
+
+This loads `outputs/1D_CNN_20k/best.pt` by default, applies the saved normalization,
+and runs the model on the official test set. It prints accuracy, macro F1,
+per-class F1, and the confusion matrix. Evaluation runs on the CPU.
+
+The script automatically recognizes the 1D CNN and hybrid CNN-LSTM from the
+checkpoint. For example, to evaluate the hybrid CV model:
+
+```bash
+python evaluate.py --weights outputs/Hybrid_CNN_LSTM_CV/best.pt
+```
 
 ## Files
 
