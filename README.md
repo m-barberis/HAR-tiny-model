@@ -1,7 +1,7 @@
 # Human activity recognition
 
 A small 1D CNN that classifies activity from accelerometer and gyroscope
-time-series windows in the UCI HAR dataset. The main model has 19,734 trainable
+time-series windows in the UCI HAR dataset. The main model is 1D_CNN_20k, it has 19,734 trainable
 parameters and does not use the dataset's precomputed feature table.
 
 Further experiments that have been made during the week, like the insertion of gravity features in the classifier or training runs with different seeds, are not included to keep the results' submission clear and simple.
