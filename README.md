@@ -35,6 +35,17 @@ checkpoint. For example, to evaluate the hybrid CV model:
 python3 evaluate.py --weights outputs/Hybrid_CNN_LSTM_CV/best.pt
 ```
 
+## Plot dataset composition
+
+```bash
+python3 plot_dataset_composition.py
+```
+
+Saves `reports/dataset_composition.png` with window counts and percentages for
+each activity in the official train and test splits. Add `--show` to open the
+plot, `--output path/to/plot.png` to change its destination, or `--data-dir` to
+use another extracted UCI HAR dataset folder.
+
 ## Train
 
 ```bash
