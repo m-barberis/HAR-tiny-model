@@ -46,6 +46,31 @@ each activity in the official train and test splits. Add `--show` to open the
 plot, `--output path/to/plot.png` to change its destination, or `--data-dir` to
 use another extracted UCI HAR dataset folder.
 
+## Plot training history
+
+```bash
+python3 plot_training_history.py
+python3 plot_training_history.py reports/Hybrid_CNN_LSTM/seed_1/learning_curve.csv --show
+```
+
+Plots training and validation loss and accuracy by epoch. The default input is
+`reports/1D_CNN_20k/learning_curve.csv`; the image is saved as
+`training_history.png` beside the input CSV. Use `--output path/to/plot.png`
+to choose a different destination, and `--show` to also open the plot.
+
+## Plot confusion matrix
+
+```bash
+python3 plot_confusion_matrix.py --show
+python3 plot_confusion_matrix.py reports/Hybrid_CNN_LSTM/seed_1/confusion_matrix.csv --normalize
+```
+
+Defaults to `reports/1D_CNN_20k/confusion_matrix.csv` and saves
+`confusion_matrix.png` beside the CSV. Rows show true activities and columns show
+predictions, with counts in each cell. Add `--normalize` for percentages within
+each true activity (saved as `confusion_matrix_normalized.png`), `--show` to open
+the plot, or `--output path/to/plot.png` to choose the output path.
+
 ## Train
 
 ```bash
